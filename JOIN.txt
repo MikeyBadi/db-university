@@ -66,3 +66,36 @@ ON `degrees`.`id` = `courses`.`degree_id`
 JOIN `departments` 
 ON `departments`.`id` = `degrees`.`department_id`
 WHERE `departments`.`name` = 'dipartimento di matematica'
+
+7.  BONUS: Selezionare per ogni studente quanti tentativi d’esame ha sostenuto per superare ciascuno dei suoi esami
+
+Answer:
+SELECT `students`.`surname`, `students`.`name`, COUNT(`exam_student`.`vote`) AS `attemps`, `courses`.`name` AS `Course_Name`, `courses`.`period`, `degrees`.`name` AS `Degree_Name`
+FROM `students`
+JOIN `exam_student` 
+ON `exam_student`.`student_id` = `students`.`id`
+JOIN `exams` 
+ON `exam_student`.`exam_id` = `exams`.`id`
+JOIN `courses`
+ON `courses`.`id` = `exams`.`course_id`
+JOIN `degrees`
+ON `degrees`.`id` = `courses`.`degree_id`
+WHERE `exam_student`.`vote` < 18
+GROUP BY `students`.`id`, `courses`.`name`, `courses`.`period`, `degrees`.`name`
+ORDER BY `students`.`surname`;
+
+
+//
+Ho provato a farlo il più specifico possibile il bonus nella soluzione qui sopra, invece qui sotto troverete la soluzione più attinente alla richiesta del bonus se non l'ho capita male io.
+//
+
+
+SELECT `students`.`surname`, `students`.`name`, COUNT(`exam_student`.`vote`) AS `attemps`
+FROM `students`
+JOIN `exam_student` 
+ON `exam_student`.`student_id` = `students`.`id`
+JOIN `exams` 
+ON `exam_student`.`exam_id` = `exams`.`id`
+WHERE `exam_student`.`vote` < 18
+GROUP BY `students`.`id`
+ORDER BY `students`.`surname`;
